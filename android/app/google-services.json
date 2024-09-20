@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "784318896518",
+    "project_id": "to-do-app-dc50e",
+    "storage_bucket": "to-do-app-dc50e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:784318896518:android:13d9171c7f691afe45f407",
+        "android_client_info": {
+          "package_name": "com.example.to_do_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJuzxll4POcEe6tq_npo0POWYKxWcAebQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

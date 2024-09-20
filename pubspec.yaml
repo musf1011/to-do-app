@@ -43,6 +43,7 @@ dependencies:
   cloud_firestore: ^5.4.1
   font_awesome_flutter: ^10.7.0
   shared_preferences: ^2.3.2
+  fluttertoast: ^8.2.8
 
 dev_dependencies:
   flutter_test:

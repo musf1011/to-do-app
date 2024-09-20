@@ -1,22 +1,25 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:to_do_app/auth/signIn.dart';
-import 'package:to_do_app/auth/signUp.dart';
 import 'package:to_do_app/auth/welcomeScreen.dart';
+import 'package:to_do_app/mainScr/mainScreen.dart';
 
 class Splashservices {
   void isLogin(BuildContext context) {
-    Timer(Duration(seconds: 2), () {
-      final user = 1; //auth.currentUser;
+    Timer(const Duration(seconds: 2), () {
+      FirebaseAuth authent = FirebaseAuth.instance;
+      final user = authent.currentUser;
+      print('yes');
+
       if (user == null) {
+        print('no');
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => SignUp()));
+            context, MaterialPageRoute(builder: (context) => const Welcome()));
       } else {
+        print('both');
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Welcome()));
+            context, MaterialPageRoute(builder: (context) => MainScreen()));
       }
     });
-    // FirebaseAuth auth = FirebaseAuth.instance;
   }
 }

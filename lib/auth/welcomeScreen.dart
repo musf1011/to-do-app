@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:to_do_app/auth/signIn.dart';
+
 import 'package:to_do_app/auth/signUp.dart';
 import 'package:to_do_app/mainScr/mainScreen.dart';
 
@@ -14,7 +15,7 @@ class Welcome extends StatelessWidget {
       body: Container(
         width: 1.sw,
         height: 1.sh,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(colors: [Colors.amber, Colors.black]),
         ),
         child: Column(
@@ -22,7 +23,7 @@ class Welcome extends StatelessWidget {
             SizedBox(
               height: .015.sh,
             ),
-            Container(
+            SizedBox(
               width: .9.sw, // Ensure the row takes the full width of the screen
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -62,8 +63,8 @@ class Welcome extends StatelessWidget {
             SizedBox(height: .03.sh),
             GestureDetector(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MainScreen()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => SignIn()));
               },
               child: Container(
                   height: .08.sh,
