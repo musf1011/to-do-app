@@ -1,4 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:to_do_app/auth/signIn.dart';
@@ -35,6 +37,13 @@ class _SignUpState extends State<SignUp> {
   final keyOfForm = GlobalKey<FormState>();
 
   FirebaseAuth authent = FirebaseAuth.instance;
+
+  //DatabaseReference dbr = FirebaseDatabase.instance.ref('userDetails');
+
+  final _database = FirebaseDatabase.instanceFor(
+    app: Firebase.app(),
+    databaseURL: "https://to-do-app-dc50e-default-rtdb.firebaseio.com",
+  ).ref('userDetails');
 
   @override
   Widget build(BuildContext context) {
@@ -288,17 +297,19 @@ class _SignUpState extends State<SignUp> {
                                 fullNameStatus == 1 &&
                                 gmailStatus == 1 &&
                                 keyOfForm.currentState!.validate()) {
-                              // SharedPreferences prefs =
-                              //     await SharedPreferences.getInstance();
-                              // await prefs.setString('fname', fn);
-                              // await prefs.setString('email', gm);
-                              // await prefs.setString('pass', pw);
-
                               authent
                                   .createUserWithEmailAndPassword(
                                       email: emailContr.text.toString().trim(),
                                       password: passw.text.toString().trim())
                                   .then((value) {
+                                DateTime currentDnT = DateTime.now();
+                                _database.child(value.user!.uid).set({
+                                  'fullName': fullname.text.toString().trim(),
+                                  'email': emailContr.text.toString().trim(),
+                                  'password': passw.text.toString().trim(),
+                                  'time': currentDnT.toIso8601String(),
+                                  'userID': value.user!.uid
+                                });
                                 ToastPopUp().toastPopUp(
                                     'Sign Up Successful', Colors.black);
 
@@ -315,9 +326,9 @@ class _SignUpState extends State<SignUp> {
                                 emailContr.clear();
                                 passw.clear();
                                 cpassw.clear();
-                              }).onError((Error, value) {
+                              }).onError((error, value) {
                                 ToastPopUp()
-                                    .toastPopUp(Error.toString(), Colors.black);
+                                    .toastPopUp(error.toString(), Colors.black);
                                 setState(() {
                                   isLoading = false;
                                 });

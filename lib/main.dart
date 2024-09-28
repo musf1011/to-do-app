@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:to_do_app/firebase_options.dart';
@@ -6,11 +7,36 @@ import 'package:to_do_app/splashScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase core
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // // Initialize Realtime Database using FirebaseDatabase.instanceFor
+  // final database = FirebaseDatabase.instanceFor(
+  //   app: Firebase.app(),
+  //   databaseURL:
+  //       "https://to-do-app-dc50e-default-rtdb.firebaseio.com", // Your database URL
+  // );
+
   runApp(const MyApp());
 }
+
+// Future<void> main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//     // databaseURL: "https://to-do-app-dc50e-default-rtdb.firebaseio.com",
+
+//   );
+//    // Initialize Realtime Database
+//   final database = FirebaseDatabase(
+//     app: Firebase.app(),
+//     databaseURL: "https://to-do-app-dc50e.firebaseio.com", // Your database URL
+//   );
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

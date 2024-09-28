@@ -183,8 +183,8 @@ class _SignInState extends State<SignIn> {
                         } else if (keyOfForm.currentState!.validate()) {
                           authentic
                               .signInWithEmailAndPassword(
-                            email: emailCont.toString().trim(),
-                            password: passcont.toString().trim(),
+                            email: emailCont.text.toString().trim(),
+                            password: passcont.text.toString().trim(),
                           )
                               .then((Value) {
                             Navigator.pushReplacement(
