@@ -12,31 +12,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // // Initialize Realtime Database using FirebaseDatabase.instanceFor
-  // final database = FirebaseDatabase.instanceFor(
-  //   app: Firebase.app(),
-  //   databaseURL:
-  //       "https://to-do-app-dc50e-default-rtdb.firebaseio.com", // Your database URL
-  // );
-
   runApp(const MyApp());
 }
-
-// Future<void> main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//     // databaseURL: "https://to-do-app-dc50e-default-rtdb.firebaseio.com",
-
-//   );
-//    // Initialize Realtime Database
-//   final database = FirebaseDatabase(
-//     app: Firebase.app(),
-//     databaseURL: "https://to-do-app-dc50e.firebaseio.com", // Your database URL
-//   );
-//   runApp(const MyApp());
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

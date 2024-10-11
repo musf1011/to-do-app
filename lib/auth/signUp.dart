@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -44,6 +45,8 @@ class _SignUpState extends State<SignUp> {
     app: Firebase.app(),
     databaseURL: "https://to-do-app-dc50e-default-rtdb.firebaseio.com",
   ).ref('userDetails');
+
+  //final FStore = FirebaseFirestore.instance;
 
   @override
   Widget build(BuildContext context) {

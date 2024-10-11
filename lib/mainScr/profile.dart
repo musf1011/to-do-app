@@ -133,18 +133,43 @@ class _ProfileState extends State<Profile> {
               child: FirebaseAnimatedList(
                   query: query,
                   itemBuilder: (context, snapshot, animation, index) {
-                    return Row(
+                    return Column(
                       children: [
-                        Center(
-                          child: Text(
-                            'This account is created on ',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                        SizedBox(
+                          height: .1.sh,
                         ),
-                        Text(
-                          snapshot.child('time').value.toString(),
-                          style: TextStyle(color: Colors.amber),
-                        )
+                        Row(
+                          children: [
+                            Center(
+                              child: Text(
+                                'This account is created on : ',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Text(
+                              snapshot.child('time').value.toString(),
+                              style: TextStyle(color: Colors.amber),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: .05.sh,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Text(
+                                'It is your password ',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Text(
+                              snapshot.child('password').value.toString(),
+                              style: TextStyle(color: Colors.amber),
+                            )
+                          ],
+                        ),
                       ],
                     );
                   }),

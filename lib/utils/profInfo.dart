@@ -98,6 +98,8 @@ class _ProfInfoState extends State<ProfInfo> {
 
   void initState() {
     super.initState();
+    // var snap = _database.child(FirebaseAuth.instance.currentUser!.uid).get();
+
     query = _database.orderByChild('userID').equalTo(authent.currentUser!.uid);
   }
 
@@ -126,7 +128,7 @@ class _ProfInfoState extends State<ProfInfo> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  'Email@gmail.com',
+                  snapshot.child('email').value.toString(),
                   style: TextStyle(color: Colors.white),
                 ),
               ],

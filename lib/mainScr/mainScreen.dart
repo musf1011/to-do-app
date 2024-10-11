@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:to_do_app/auth/welcomeScreen.dart';
 import 'package:to_do_app/mainScr/addTask.dart';
 import 'package:to_do_app/mainScr/profile.dart';
@@ -20,30 +20,35 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   FirebaseAuth authentication = FirebaseAuth.instance;
 
-  // final _database = FirebaseDatabase.instance.ref('userDetails');
+  //final _database = FirebaseDatabase.instance.ref('userDetails');
 
+// real time database instance  creating
   final _database = FirebaseDatabase.instanceFor(
     app: Firebase.app(),
     databaseURL: "https://to-do-app-dc50e-default-rtdb.firebaseio.com",
   ).ref('userDetails');
 
-  @override
-  void initState() {
-    super.initState();
-    toDoList = to_do_list();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   toDoList = to_do_list();
+  // }
 
-  Future<List<String>> to_do_list() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    return pref.getStringList('dbToDoList') ?? [];
-  }
+  // Future<List<String>> to_do_list() async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   return pref.getStringList('dbToDoList') ?? [];
+  // }
 
-  Future<void> saveToDoList(List<String> toDoList) async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    pref.setStringList('dbToDoList', toDoList);
-  }
+  // Future<void> saveToDoList(List<String> toDoList) async {
+  //   SharedPreferences pref = await SharedPreferences.getInstance();
+  //   pref.setStringList('dbToDoList', toDoList);
+  // }
 
-  late Future<List<String>> toDoList;
+  // late Future<List<String>> toDoList;
+
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
+
+  final fStore = FirebaseFirestore.instance.collection('ToDo').snapshots();
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +70,17 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ]),
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.white,
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Addtask()));
+        },
+        child: Icon(
+          Icons.add,
+          color: Colors.amber,
         ),
       ),
       drawer: Drawer(
@@ -168,110 +184,88 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       backgroundColor: Colors.black,
-      body: Column(
+      body:
+          //  SingleChildScrollView(
+          //   child:
+          Column(
         children: [
-          // TextField(),
-          FutureBuilder<List<String>>(
-              future: toDoList,
-              builder: (context, snapshot) {
-                final items = snapshot.data!;
-                return Column(
-                  children: [
-                    // const SizedBox(
-                    //   height: 20,
-                    // ),
-                    Expanded(
-                      child: ListView.builder(
-                          itemCount: items.length,
-                          itemBuilder: (context, index) {
-                            return Column(
+          TextField(
+            decoration: InputDecoration(labelText: 'search'),
+          ),
+          StreamBuilder<QuerySnapshot>(
+              stream: fStore,
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                return Expanded(
+                  child: ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (BuildContext context, Index) {
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text(
-                                      '${index + 1}:',
-                                      style: const TextStyle(
-                                          color:
-                                              Color.fromARGB(255, 182, 146, 29),
-                                          fontSize: 18),
-                                    ),
-                                    const SizedBox(
-                                      width: 350,
-                                    ),
-                                    GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            items.removeAt(index);
-                                            saveToDoList(items);
-                                          });
-                                        },
-                                        child: const Icon(
-                                          Icons.delete_forever,
-                                          color: Colors.white,
-                                        ))
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Container(
-                                    width: 500,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Color.fromARGB(255, 182, 146, 29)
-                                        // gradient: LinearGradient(
-                                        //     colors: [Colors.amber, Colors.black]),
-                                        ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          12, 12, 6, 2),
-                                      child: Text(
-                                        items[index],
-                                        style: const TextStyle(
-                                            fontSize: 18, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
+                                Text(
+                                  (Index + 1).toString(),
+                                  style: const TextStyle(
+                                      color: Color.fromARGB(255, 182, 146, 29),
+                                      fontSize: 18),
                                 ),
                                 const SizedBox(
-                                  height: 10,
-                                )
+                                  width: 350,
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        snapshot.data!.docs[Index].reference
+                                            .delete();
+                                        fireStore
+                                            .collection('ToDo')
+                                            .doc('ID')
+                                            .delete();
+                                        // fireStore.collection('ToDo').doc(snapshot.data!.docs['ID']).,
+                                      });
+                                    },
+                                    child: const Icon(
+                                      Icons.delete_forever,
+                                      color: Colors.white,
+                                    ))
                               ],
-                            );
-                          }),
-                    ),
-                    //           Row(
-                    //               children: [
-                    //                 Padding(
-                    //                   padding: const EdgeInsets.only(left: 8, bottom: 6),
-                    //                   child: Container(
-                    //                     height: 5,
-                    //                     width: 5,
-                    //                     decoration: BoxDecoration(
-                    //                         borderRadius: BorderRadius.circular(100),
-                    //                         color: Color.fromARGB(255, 182, 146, 29)),
-                    //                     child: IconButton(
-                    //                         onPressed: () {
-                    //                           Navigator.push(
-                    //                               context,
-                    //                               MaterialPageRoute(
-                    //                                   builder: (context) => Addtask()));
-                    //                         },
-                    //                         icon: const Icon(
-                    //                           Icons.add,
-                    //                           color: Colors.black,
-                    //                         )),
-                    //                   ),
-                    //                 )
-                    //               ],
-                    //             )
-                  ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Container(
+                                width: 500,
+                                height: 80,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Color.fromARGB(255, 182, 146, 29)
+                                    // gradient: LinearGradient(
+                                    //     colors: [Colors.amber, Colors.black]),
+                                    ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(12, 12, 6, 2),
+                                  child: Text(
+                                    snapshot.data!.docs[Index]['Task'],
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            )
+                          ],
+                        );
+                      }),
                 );
+                //       );
               }),
         ],
       ),
+      //),
     );
   }
 }
